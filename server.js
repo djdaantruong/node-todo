@@ -5,10 +5,13 @@
 // but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
 // https://expressjs.com/en/starter/basic-routing.html
 app.set("view engine", "pug");
 app.set("views", "./views");
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.get("/", function(req, res) {
   res.render("index", {
@@ -39,6 +42,15 @@ app.get("/todos/search", function(req, res) {
     todos: matchedTodos
   });
 });
+
+app.get("/todos/create", function(req, res) {
+  res.render("todos/create");
+  });
+
+app.post("/todos/create", function(req, res) {
+  todos.push(req.body);
+  res.redirect("/todos");
+  });
 
 // listen for requests :)
 app.listen(process.env.PORT, () => {
